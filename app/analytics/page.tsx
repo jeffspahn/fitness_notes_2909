@@ -68,7 +68,7 @@ export default function AnalyticsPage() {
   };
 
   const prepareWeightData = () => {
-    const weightData: Record<string, number[]> = {};
+    const weightData: Record<string, Array<{date: string, weight: number, reps: number}>> = {};
     
     workouts.forEach(workout => {
       const date = new Date(workout.date).toLocaleDateString('de-DE');

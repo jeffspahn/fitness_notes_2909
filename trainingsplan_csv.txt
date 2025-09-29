@@ -1,0 +1,59 @@
+Split,Übung,Anzahl
+1 - Aufwärmen,Leichtes Cardio,3 Min
+1 - Aufwärmen,Brustdehnung an der Wand,2x 30 Sek pro Arm
+1 - Aufwärmen,Schulterkreisen,2x 8 vorwärts/rückwärts
+1 - Aufwärmen,Katzenbuckel,2x 8 Wdh
+1 - Aufwärmen,Arm-Circles,2x 8 pro Richtung
+1 - Krafttraining,Assisted Pull-ups (Maschine),3x 6-8 Wdh
+1 - Krafttraining,Seated Cable Row (enger Griff),3x 10-12 Wdh
+1 - Krafttraining,Face Pulls,3x 12-15 Wdh
+1 - Krafttraining,Incline Push-ups (Hände erhöht),3x 8-12 Wdh
+1 - Krafttraining,Assisted Dips (Maschine),3x 5-8 Wdh
+1 - Krafttraining,Tricep Extensions (Kabel),3x 10-12 Wdh
+1 - Krafttraining,Plank,3x 30-45 Sek
+1 - Krafttraining,Dead Bug,2x 8 pro Seite
+1 - Krafttraining,Bird Dog,2x 6 pro Seite
+1 - HIIT,Mountain Climbers,3 Runden x 40 Sek
+1 - HIIT,Jumping Jacks,3 Runden x 40 Sek
+1 - HIIT,High Knees,3 Runden x 40 Sek
+1 - Cool-down,Brustdehnung,1x 30 Sek
+1 - Cool-down,Nacken-/Schulterdehnung,1x 20 Sek pro Seite
+1 - Cool-down,Rückenstreckung,1x 30 Sek
+2 - Aufwärmen,Leichtes Cardio,3 Min
+2 - Aufwärmen,Hüftkreisen,2x 8 pro Richtung
+2 - Aufwärmen,Beinpendel,2x 8 pro Bein
+2 - Aufwärmen,Thoracic Spine Rotation,2x 6 pro Seite
+2 - Aufwärmen,Schulterblatt-Aktivierung,2x 8
+2 - Krafttraining,Goblet Squats,3x 12-15 Wdh
+2 - Krafttraining,Bulgarian Split Squats,3x 8 pro Bein
+2 - Krafttraining,Glute Bridges,3x 12-15 Wdh
+2 - Krafttraining,Lat Pulldown,3x 10-12 Wdh
+2 - Krafttraining,Push-ups (Standard),3x 8-12 Wdh
+2 - Krafttraining,Seated Shoulder Press,3x 8-10 Wdh
+2 - Krafttraining,L-Sit Progression (Beine angewinkelt),3x 10-15 Sek
+2 - Krafttraining,Russian Twists,3x 16 Wdh
+2 - Krafttraining,Hollow Body Hold,3x 15-25 Sek
+2 - HIIT,Burpees,3 Runden x 40 Sek
+2 - HIIT,Jump Squats,3 Runden x 40 Sek
+2 - HIIT,Push-up to T,3 Runden x 40 Sek
+2 - Cool-down,Hüftbeuger-Dehnung,1x 30 Sek pro Seite
+2 - Cool-down,Rückendehnung,1x 30 Sek
+3 - Aufwärmen,Leichtes Cardio,3 Min
+3 - Aufwärmen,Beinpendel,2x 8 pro Bein/Richtung
+3 - Aufwärmen,Hüftkreisen,2x 8 pro Richtung
+3 - Aufwärmen,Wirbelsäulen-Rotation,2x 6 pro Seite
+3 - Aufwärmen,Gesäß-Aktivierung,2x 8
+3 - Krafttraining,Romanian Deadlifts,3x 10-12 Wdh
+3 - Krafttraining,Hip Thrusts,3x 12-15 Wdh
+3 - Krafttraining,Reverse Hyperextensions,3x 10-12 Wdh
+3 - Krafttraining,Negative Pull-ups,3x 3-5 Wdh
+3 - Krafttraining,Bent-over Rows,3x 10-12 Wdh
+3 - Krafttraining,Reverse Flyes,3x 10-12 Wdh
+3 - Krafttraining,Step-ups,3x 8 pro Bein
+3 - Krafttraining,Farmers Walk,2x 30 Sek
+3 - Krafttraining,Superman,3x 10-12 Wdh
+3 - HIIT,Squat to Calf Raise,3 Runden x 40 Sek
+3 - HIIT,Plank to Downward Dog,3 Runden x 40 Sek
+3 - HIIT,Reverse Lunges,3 Runden x 40 Sek
+3 - Cool-down,Oberschenkel-Dehnung,1x 30 Sek pro Seite
+3 - Cool-down,Rückenstreckung,1x 30 Sek

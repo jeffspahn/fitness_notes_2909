@@ -34,12 +34,21 @@ export interface SplitExercise {
   exercise: Exercise;
   sets: number;
   repetitions: number;
+  weight?: number;
+  restTime?: number; // in seconds
+  notes?: string;
+  category?: string; // e.g., "Warm-up", "Main", "Cool-down"
+  difficulty?: 'Easy' | 'Medium' | 'Hard';
 }
 
 export interface Split {
   id: string;
   name: string;
   exercises: SplitExercise[];
+  description?: string;
+  duration?: number; // in minutes
+  focus?: string; // e.g., "Oberkörper", "Ganzkörper", "Unterkörper"
+  difficulty?: 'Beginner' | 'Intermediate' | 'Advanced';
 }
 
 export interface TrainingPlan {
@@ -61,6 +70,15 @@ export interface CSVExercise {
   exercise: string;
   sets: number;
   repetitions: number;
+  weight?: number;
+  restTime?: number;
+  notes?: string;
+  category?: string;
+  difficulty?: string;
+  splitDescription?: string;
+  splitDuration?: number;
+  splitFocus?: string;
+  splitDifficulty?: string;
 }
 
 export interface TrainingExecution {

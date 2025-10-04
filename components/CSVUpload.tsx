@@ -106,7 +106,7 @@ export default function CSVUpload({ onUploadComplete }: CSVUploadProps) {
                 .replace(/ß/g, 'ss')
                 .replace(/e/g, 'e'); // Handle umlauts
               
-              // More flexible matching
+              // More flexible matching for all columns
               if (normalizedKey.includes('split') || key.toLowerCase().includes('split')) {
                 normalizedRow.split = row[key];
               } else if (normalizedKey.includes('ubung') || normalizedKey.includes('exercise') || 
@@ -118,6 +118,33 @@ export default function CSVUpload({ onUploadComplete }: CSVUploadProps) {
               } else if (normalizedKey.includes('wiederholungen') || normalizedKey.includes('repetitions') || 
                         normalizedKey.includes('reps') || key.toLowerCase().includes('wiederholungen')) {
                 normalizedRow.repetitions = row[key];
+              } else if (normalizedKey.includes('gewicht') || normalizedKey.includes('weight') || 
+                        key.toLowerCase().includes('gewicht')) {
+                normalizedRow.weight = row[key];
+              } else if (normalizedKey.includes('pause') || normalizedKey.includes('rest') || 
+                        key.toLowerCase().includes('pause')) {
+                normalizedRow.restTime = row[key];
+              } else if (normalizedKey.includes('notizen') || normalizedKey.includes('notes') || 
+                        key.toLowerCase().includes('notizen')) {
+                normalizedRow.notes = row[key];
+              } else if (normalizedKey.includes('kategorie') || normalizedKey.includes('category') || 
+                        key.toLowerCase().includes('kategorie')) {
+                normalizedRow.category = row[key];
+              } else if (normalizedKey.includes('schwierigkeit') || normalizedKey.includes('difficulty') || 
+                        key.toLowerCase().includes('schwierigkeit')) {
+                normalizedRow.difficulty = row[key];
+              } else if (normalizedKey.includes('splitbeschreibung') || normalizedKey.includes('splitdescription') || 
+                        key.toLowerCase().includes('split-beschreibung')) {
+                normalizedRow.splitDescription = row[key];
+              } else if (normalizedKey.includes('splitdauer') || normalizedKey.includes('splitduration') || 
+                        key.toLowerCase().includes('split-dauer')) {
+                normalizedRow.splitDuration = row[key];
+              } else if (normalizedKey.includes('splitfokus') || normalizedKey.includes('splitfocus') || 
+                        key.toLowerCase().includes('split-fokus')) {
+                normalizedRow.splitFocus = row[key];
+              } else if (normalizedKey.includes('splitschwierigkeit') || normalizedKey.includes('splitdifficulty') || 
+                        key.toLowerCase().includes('split-schwierigkeit')) {
+                normalizedRow.splitDifficulty = row[key];
               }
             });
             return normalizedRow;
@@ -150,6 +177,11 @@ export default function CSVUpload({ onUploadComplete }: CSVUploadProps) {
             const exerciseName = row.exercise.toString().trim();
             const sets = parseInt(row.sets.toString()) || 3;
             const repetitions = parseInt(row.repetitions.toString()) || 10;
+            const weight = parseFloat(row.weight?.toString()) || undefined;
+            const restTime = parseInt(row.restTime?.toString()) || undefined;
+            const notes = row.notes?.toString().trim() || undefined;
+            const category = row.category?.toString().trim() || undefined;
+            const difficulty = row.difficulty?.toString().trim() as 'Easy' | 'Medium' | 'Hard' || undefined;
             
             // Find or create exercise
             let exercise = existingExercises.find(ex => 
@@ -160,8 +192,8 @@ export default function CSVUpload({ onUploadComplete }: CSVUploadProps) {
               exercise = {
                 id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
                 name: exerciseName,
-                category: 'Allgemein',
-                description: ''
+                category: category || 'Allgemein',
+                description: notes || ''
               };
               saveExercise(exercise);
               newExerciseCount++;
@@ -172,7 +204,12 @@ export default function CSVUpload({ onUploadComplete }: CSVUploadProps) {
               id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
               exercise: exercise,
               sets: sets,
-              repetitions: repetitions
+              repetitions: repetitions,
+              weight: weight,
+              restTime: restTime,
+              notes: notes,
+              category: category,
+              difficulty: difficulty
             };
 
             // Add to split
@@ -190,11 +227,24 @@ export default function CSVUpload({ onUploadComplete }: CSVUploadProps) {
             // Check if split already exists
             const existingSplit = existingSplits.find(s => s.name === splitName);
             
-            if (!existingSplit) {
+            if (!existingSplit || replaceMode === 'add') {
+              // Get split metadata from first exercise in the split
+              const firstExercise = splitExercises[0];
+              const splitDescription = firstExercise?.notes || undefined;
+              const splitDuration = undefined; // Could be extracted from split-specific data
+              const splitFocus = undefined; // Could be extracted from split-specific data
+              const splitDifficulty = firstExercise?.difficulty ? 
+                (firstExercise.difficulty === 'Easy' ? 'Beginner' : 
+                 firstExercise.difficulty === 'Medium' ? 'Intermediate' : 'Advanced') : undefined;
+
               const newSplit: Split = {
-                id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                id: existingSplit?.id || Date.now().toString() + Math.random().toString(36).substr(2, 9),
                 name: splitName,
-                exercises: splitExercises
+                exercises: splitExercises,
+                description: splitDescription,
+                duration: splitDuration,
+                focus: splitFocus,
+                difficulty: splitDifficulty
               };
               saveSplit(newSplit);
               newSplitCount++;
@@ -251,12 +301,18 @@ export default function CSVUpload({ onUploadComplete }: CSVUploadProps) {
   };
 
   const downloadTemplate = () => {
-    const template = 'Split,Übung,Sätze,Wiederholungen\nTag 1,Bankdrücken,3,10\nTag 1,Kniebeugen,4,12\nTag 1,Klimmzüge,3,8\nTag 2,Schulterdrücken,3,10\nTag 2,Latziehen,4,12\nTag 2,Beinpresse,3,15';
+    const template = `Split,Übung,Sätze,Wiederholungen,Gewicht,Pause,Notizen,Kategorie,Schwierigkeit,Split-Beschreibung,Split-Dauer,Split-Fokus,Split-Schwierigkeit
+Tag 1 - Oberkörper,Bankdrücken,3,10,60,90,Schonend für Trichterbrust,Main,Medium,Oberkörper-Fokus + HIIT,90,Oberkörper,Intermediate
+Tag 1 - Oberkörper,Assisted Pull-ups,4,6,0,120,Aufbau zur selbstständigen Klimmzug-Kraft,Main,Hard,Oberkörper-Fokus + HIIT,90,Oberkörper,Intermediate
+Tag 1 - Oberkörper,Face Pulls,3,15,15,60,Wichtig für hintere Schulter und Haltung,Main,Easy,Oberkörper-Fokus + HIIT,90,Oberkörper,Intermediate
+Tag 2 - Ganzkörper,Goblet Squats,4,12,20,90,Wichtig für Haltungskorrektur,Main,Medium,Ganzkörper + Rumpfstabilität,90,Ganzkörper,Intermediate
+Tag 2 - Ganzkörper,Bulgarian Split Squats,3,10,0,120,Pro Bein,Main,Hard,Ganzkörper + Rumpfstabilität,90,Ganzkörper,Intermediate
+Tag 3 - Unterkörper,Romanian Deadlifts,4,10,40,120,Wichtig für Haltungskorrektur,Main,Hard,Unterkörper + Rücken,90,Unterkörper,Advanced`;
     const blob = new Blob([template], { type: 'text/csv;charset=utf-8' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'trainingsplan_template.csv';
+    a.download = 'trainingsplan_detailliert_template.csv';
     a.click();
     window.URL.revokeObjectURL(url);
   };
@@ -347,25 +403,44 @@ export default function CSVUpload({ onUploadComplete }: CSVUploadProps) {
       <div className="card">
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Trainingsplan hochladen</h2>
         
-        {/* Instructions */}
-        <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-blue-50 rounded-lg">
-          <h3 className="font-medium text-blue-900 mb-2">CSV/TXT-Format</h3>
-          <p className="text-sm text-blue-700 mb-2">
-            Die Datei (CSV oder TXT) sollte folgende Spalten enthalten:
-          </p>
-          <ul className="text-sm text-blue-700 list-disc list-inside space-y-1">
-            <li><strong>Split:</strong> Trainingstag (z.B. "Tag 1", "Oberkörper", "Push")</li>
-            <li><strong>Übung:</strong> Name der Übung (z.B. "Bankdrücken", "Kniebeugen")</li>
-            <li><strong>Sätze:</strong> Anzahl der Sätze (z.B. 3, 4, 5)</li>
-            <li><strong>Wiederholungen:</strong> Anzahl der Wiederholungen pro Satz (z.B. 10, 12, 15)</li>
-          </ul>
-          <button
-            onClick={downloadTemplate}
-            className="mt-3 text-sm text-blue-600 hover:text-blue-800 underline"
-          >
-            CSV-Vorlage herunterladen
-          </button>
-        </div>
+            {/* Instructions */}
+            <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-blue-50 rounded-lg">
+              <h3 className="font-medium text-blue-900 mb-2">CSV/TXT-Format - Detaillierter Trainingsplan</h3>
+              <p className="text-sm text-blue-700 mb-2">
+                Die Datei (CSV oder TXT) sollte folgende Spalten enthalten:
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-700">
+                <div>
+                  <h4 className="font-semibold mb-1">Pflichtfelder:</h4>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li><strong>Split:</strong> Trainingstag (z.B. "Tag 1", "Oberkörper")</li>
+                    <li><strong>Übung:</strong> Name der Übung (z.B. "Bankdrücken")</li>
+                    <li><strong>Sätze:</strong> Anzahl der Sätze (z.B. 3, 4, 5)</li>
+                    <li><strong>Wiederholungen:</strong> Anzahl der Wiederholungen (z.B. 10, 12, 15)</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-1">Optionale Felder:</h4>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li><strong>Gewicht:</strong> Startgewicht in kg (z.B. 20, 50)</li>
+                    <li><strong>Pause:</strong> Pausenzeit in Sekunden (z.B. 60, 90)</li>
+                    <li><strong>Notizen:</strong> Zusätzliche Hinweise</li>
+                    <li><strong>Kategorie:</strong> Warm-up, Main, Cool-down</li>
+                    <li><strong>Schwierigkeit:</strong> Easy, Medium, Hard</li>
+                    <li><strong>Split-Beschreibung:</strong> Beschreibung des Splits</li>
+                    <li><strong>Split-Dauer:</strong> Dauer in Minuten</li>
+                    <li><strong>Split-Fokus:</strong> Oberkörper, Ganzkörper, etc.</li>
+                    <li><strong>Split-Schwierigkeit:</strong> Beginner, Intermediate, Advanced</li>
+                  </ul>
+                </div>
+              </div>
+              <button
+                onClick={downloadTemplate}
+                className="mt-3 text-sm text-blue-600 hover:text-blue-800 underline"
+              >
+                CSV-Vorlage herunterladen
+              </button>
+            </div>
 
         {/* Upload Area */}
         <div
